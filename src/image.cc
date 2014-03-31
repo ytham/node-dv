@@ -28,6 +28,7 @@
 #include <lodepng.h>
 #include <jpgd.h>
 #include <jpge.h>
+#include "Matrix.h"
 
 using namespace v8;
 using namespace node;
@@ -52,6 +53,11 @@ PIX *pixFromSource(uint8_t *pixSource, int32_t width, int32_t height, int32_t de
         }
         line += pix->wpl;
     }
+    return pix;
+}
+
+PIX *pixFromMat(uchar *matData, int width, int height, int channels, size_t step) {
+    PIX *pix = pixCreateNoInit(width, height, channels);
     return pix;
 }
 
@@ -288,8 +294,13 @@ Handle<Value> Image::New(const Arguments &args)
     Pix *pix;
     if (args.Length() == 0) {
         pix = 0;
-    } else if (args.Length() == 1 &&  Image::HasInstance(args[0])) {
-        pix = pixCopy(NULL, Image::Pixels(args[0]->ToObject()));
+    } else if (args.Length() == 1) {
+        std::cout << "Arg length 1" << std::endl;
+        Matrix *mat = ObjectWrap::Unwrap<Matrix>(args[0]->ToObject());
+        std::cout << "Matrix: " << mat->mat.size().width << std::endl;
+        //pix = pixCreateHeader(mat->mat.size().width, mat->mat.size().height, 8);
+        //pix->data = (l_uint32*)mat->mat.data;
+        pix = pixFromSource(mat->mat.data, mat->mat.size().width, mat->mat.size().height, 8, 8);
     } else if (args.Length() == 2 && Buffer::HasInstance(args[1])) {
         String::AsciiValue format(args[0]->ToString());
         Local<Object> buffer = args[1]->ToObject();
@@ -364,6 +375,7 @@ Handle<Value> Image::New(const Arguments &args)
         }
         pix = pixFromSource(reinterpret_cast<uint8_t*>(Buffer::Data(buffer)), width, height, depth, 32);
     } else {
+        std::cout << args.Length() << std::endl;
         return THROW(TypeError, "expected (image: Image) or (image1: Image, "
                      "image2: Image, image3: Image) or (format: String, "
                      "image: Buffer, [width: Int32, height: Int32]) or no arguments at all");

@@ -23,6 +23,7 @@
 #include "image.h"
 #include "tesseract.h"
 #include "zxing.h"
+#include "Matrix.h"
 
 using namespace v8;
 
@@ -31,6 +32,7 @@ extern "C" void init(Handle<Object> target)
     binding::Image::Init(target);
     binding::Tesseract::Init(target);
     binding::ZXing::Init(target);
+    binding::Matrix::Init(target);
 }
 
 NODE_MODULE(dvBinding, init)

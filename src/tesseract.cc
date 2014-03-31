@@ -30,6 +30,7 @@
 #include <image.h>
 #include <tesseractclass.h>
 #include <params.h>
+#include "Matrix.h"
 
 using namespace v8;
 using namespace node;
@@ -89,6 +90,8 @@ void Tesseract::Init(Handle<Object> target)
                FunctionTemplate::New(FindSymbols)->GetFunction());
     proto->Set(String::NewSymbol("findText"),
                FunctionTemplate::New(FindText)->GetFunction());
+    proto->Set(String::NewSymbol("setImageFromMatrix"),
+               FunctionTemplate::New(SetImageFromMatrix)->GetFunction());
     target->Set(String::NewSymbol("Tesseract"),
                 Persistent<Function>::New(constructor_template->GetFunction()));
 }
@@ -396,6 +399,24 @@ Handle<Value> Tesseract::FindSymbols(const Arguments &args)
     HandleScope scope;
     Tesseract* obj = ObjectWrap::Unwrap<Tesseract>(args.This());
     return scope.Close(obj->TransformResult(tesseract::RIL_SYMBOL, args));
+}
+
+Handle<Value> Tesseract::SetImageFromMatrix(const Arguments &args) 
+{
+    HandleScope scope;
+
+    Tesseract* obj = ObjectWrap::Unwrap<Tesseract>(args.This());
+    Matrix *img = ObjectWrap::Unwrap<Matrix>(args[0]->ToObject());
+
+    uchar *imgData = (uchar*)img->mat.data;
+    int width = img->mat.size().width;
+    int height = img->mat.size().height;
+    int channels = img->mat.channels();
+    size_t step1 = img->mat.step1();
+    
+    obj->api_.SetImage(imgData, width, height, channels, step1);
+
+    return scope.Close(v8::Null());
 }
 
 Handle<Value> Tesseract::FindText(const Arguments &args)

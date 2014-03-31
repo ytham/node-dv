@@ -3,6 +3,17 @@
   'targets': [
     {
       'target_name': 'dvBinding',
+      'sources': [
+        'src/Matrix.cc',
+        'src/image.cc',
+        'src/tesseract.cc',
+        'src/util.cc',
+        'src/zxing.cc',
+        'src/module.cc',
+      ],
+      'libraries': [
+        '<!@(pkg-config --libs opencv)'
+      ],
       'dependencies': [
         'deps/jpg/jpg.gyp:jpg',
         'deps/lodepng/lodepng.gyp:lodepng',
@@ -25,13 +36,6 @@
         'deps/tesseract/viewer',
         'deps/tesseract/wordrec',
         'deps/zxing/core/src',
-      ],
-      'sources': [
-        'src/image.cc',
-        'src/tesseract.cc',
-        'src/util.cc',
-        'src/zxing.cc',
-        'src/module.cc',
       ],
       'conditions': [
         ['OS=="linux"',

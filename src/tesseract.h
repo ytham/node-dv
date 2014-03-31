@@ -25,6 +25,7 @@
 #include <v8.h>
 #include <node.h>
 #include <baseapi.h>
+#include "Matrix.h"
 
 namespace binding {
 
@@ -51,6 +52,8 @@ private:
     static v8::Handle<v8::Value> GetDoubleVariable(v8::Local<v8::String> prop, const v8::AccessorInfo &info);
     static v8::Handle<v8::Value> GetStringVariable(v8::Local<v8::String> prop, const v8::AccessorInfo &info);
 
+
+
     // Methods.
     static v8::Handle<v8::Value> Clear(const v8::Arguments& args);
     static v8::Handle<v8::Value> ClearAdaptiveClassifier(const v8::Arguments& args);
@@ -61,6 +64,7 @@ private:
     static v8::Handle<v8::Value> FindWords(const v8::Arguments& args);
     static v8::Handle<v8::Value> FindSymbols(const v8::Arguments& args);
     static v8::Handle<v8::Value> FindText(const v8::Arguments& args);
+    static v8::Handle<v8::Value> SetImageFromMatrix(const v8::Arguments& args);
 
     Tesseract(const char *datapath, const char *language);
     ~Tesseract();
