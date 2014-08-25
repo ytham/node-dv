@@ -4,12 +4,12 @@
     {
       'target_name': 'dvBinding',
       'sources': [
-        'src/Matrix.cc',
         'src/image.cc',
         'src/tesseract.cc',
         'src/util.cc',
         'src/zxing.cc',
         'src/module.cc',
+        'src/Matrix.cc',
       ],
       'libraries': [
         '<!@(pkg-config --libs opencv)'
@@ -46,7 +46,13 @@
         ['OS=="mac"',
           {
             'xcode_settings': {
-              'OTHER_CFLAGS!': [ '-w' ]
+              'OTHER_CFLAGS!': [ 
+              '-w',
+              "-mmacosx-version-min=10.7",
+              "-std=c++11",
+              "-stdlib=libc++",
+              '<!@(pkg-config --cflags opencv)'
+              ]
             }
           }
         ],

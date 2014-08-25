@@ -102,9 +102,18 @@ Handle<Value> Tesseract::New(const Arguments &args)
     Local<String> datapath;
     Local<String> lang;
     Local<Object> image;
+    bool limit = false;
     if (args.Length() == 1 && args[0]->IsString()) {
         datapath = args[0]->ToString();
         lang = String::New("eng");
+    } else if (args.Length() == 3 && args[2]->IsBoolean()) {
+        std::cout << "Arg 2 is boolean" << std::endl;
+        datapath = args[0]->ToString();
+        lang = String::New("eng");
+        limit = args[1]->BooleanValue();
+        if (limit) {
+            std::cout << "True" << std::endl;
+        }
     } else if (args.Length() == 2 && args[0]->IsString() && args[1]->IsString()) {
         datapath = args[0]->ToString();
         lang = args[1]->ToString();
@@ -121,6 +130,9 @@ Handle<Value> Tesseract::New(const Arguments &args)
     }
     Tesseract* obj = new Tesseract(*String::AsciiValue(datapath),
                                    *String::AsciiValue(lang));
+    if (limit) {
+        obj->api_.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,:;_-");
+    }
     if (!image.IsEmpty()) {
         obj->image_ = Persistent<Object>::New(image->ToObject());
         obj->api_.SetImage(Image::Pixels(obj->image_));

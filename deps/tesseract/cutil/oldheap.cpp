@@ -80,7 +80,7 @@ int HeapPop(HEAP *Heap, FLOAT32 *Key, void *out_ptr) {
   void **Data = (void **) out_ptr;
 
   if (Heap->FirstFree <= 1)
-    return (EMPTY);
+    return (-1);
 
   *Key = Heap->Entry[1].Key;
   *Data = Heap->Entry[1].Data;
@@ -130,7 +130,7 @@ int HeapPopWorst(HEAP *Heap, FLOAT32 *Key, void *out_ptr) {
   void **Data = (void **) out_ptr;
 
   if (Heap->FirstFree <= 1)
-    return (EMPTY);
+    return (-1);
 
   HoleKey = Heap->Entry[1].Key;
   Hole = 1;
@@ -276,7 +276,7 @@ int GetTopOfHeap(HEAP *Heap, HEAPENTRY *Entry) {
   inT32 Son;
 
   if (Heap->FirstFree <= 1)
-    return (EMPTY);
+    return (-1);
 
   Entry->Key = Heap->Entry[1].Key;
   Entry->Data = Heap->Entry[1].Data;
@@ -327,7 +327,7 @@ int GetTopOfHeap(HEAP *Heap, HEAPENTRY *Entry) {
 void FreeHeapData(HEAP *Heap, void_dest destructor) {
   HEAPENTRY Entry;
 
-  while (GetTopOfHeap (Heap, &Entry) != EMPTY)
+  while (GetTopOfHeap (Heap, &Entry) != -1)
     destructor (Entry.Data);
 
   FreeHeap(Heap);

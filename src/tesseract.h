@@ -25,7 +25,6 @@
 #include <v8.h>
 #include <node.h>
 #include <baseapi.h>
-#include "Matrix.h"
 
 namespace binding {
 

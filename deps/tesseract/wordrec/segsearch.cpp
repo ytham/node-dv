@@ -123,7 +123,7 @@ void Wordrec::SegSearch(CHUNKS_RECORD *chunks_record,
     int pop;
     while (true) {
       pop = HeapPop(pain_points, &pain_point_priority, &pain_point);
-      if (pop == EMPTY) break;
+      if (pop == -1) break;
       if (pain_point->Valid(*ratings) &&
         ratings->get(pain_point->col, pain_point->row) == NOT_CLASSIFIED) {
         break;
@@ -131,7 +131,7 @@ void Wordrec::SegSearch(CHUNKS_RECORD *chunks_record,
         delete pain_point;
       }
     }
-    if (pop == EMPTY) {
+    if (pop == -1) {
       if (segsearch_debug_level > 0) tprintf("Pain points queue is empty\n");
       break;
     }
@@ -342,7 +342,7 @@ void Wordrec::InitBlamerForSegSearch(const WERD_CHOICE *best_choice,
   float pain_point_priority;
   MATRIX_COORD *pain_point;
   while ((pop = HeapPop(pain_points, &pain_point_priority,
-                         &pain_point)) != EMPTY) {
+                         &pain_point)) != -1) {
     delete pain_point;
   }
   // Fill pain points for any unclassifed blob corresponding to the

@@ -706,7 +706,7 @@ void CreateClusterTree(CLUSTERER *Clusterer) {
   KDWalk(context.tree, (void_proc)MakePotentialClusters, &context);
 
   // form potential clusters into actual clusters - always do "best" first
-  while (GetTopOfHeap(context.heap, &HeapEntry) != EMPTY) {
+  while (GetTopOfHeap(context.heap, &HeapEntry) != -1) {
     PotentialCluster = (TEMPCLUSTER *)HeapEntry.Data;
 
     // if main cluster of potential cluster is already in another cluster

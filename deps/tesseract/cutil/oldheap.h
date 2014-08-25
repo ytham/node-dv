@@ -26,7 +26,6 @@
 
 #define HEAPFULL      3000
 
-#define EMPTY -1
 #define TESS_HEAP_OK   0
 
 struct HEAPENTRY {
